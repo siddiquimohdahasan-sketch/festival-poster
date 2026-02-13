@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Festival Poster Generator</title>
+</head>
+<body style="text-align:center; font-family:Arial;">
+
+<h2>Create Your Festival Poster</h2>
+
+<input type="text" id="festival" placeholder="Enter Festival Name (e.g. Ramzan Mubarak)">
+<br><br>
+
+<input type="text" id="username" placeholder="Enter Your Name">
+<br><br>
+
+<input type="file" id="photo">
+<br><br>
+
+<button onclick="generate()">Generate Poster</button>
+
+<br><br>
+
+<img id="result" width="400"/>
+
+<script>
+async function generate() {
+  const name = document.getElementById("username").value;
+  const festival = document.getElementById("festival").value;
+  const photoInput = document.getElementById("photo").files[0];
+
+  const formData = new FormData();
+  formData.append("name", name);
+  formData.append("festival", festival);
+  formData.append("photo", photoInput);
+
+  const response = await fetch("/generate", {
+    method: "POST",
+    body: formData
+  });
+
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  document.getElementById("result").src = url;
+}
+</script>
+
+</body>
+</html>
