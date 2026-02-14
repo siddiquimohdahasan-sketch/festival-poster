@@ -5,6 +5,9 @@ const multer = require("multer");
 
 const app = express();
 app.use(express.static("public"));
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 const upload = multer({ storage: multer.memoryStorage() });
 
