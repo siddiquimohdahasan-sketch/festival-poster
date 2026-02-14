@@ -86,4 +86,4 @@ app.post("/generate", upload.single("photo"), async (req, res) => {
 
 // ✅ Railway PORT support
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server running on port", PORT));
+app.listen(PORT, () => console.l
