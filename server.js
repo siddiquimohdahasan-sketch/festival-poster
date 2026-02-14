@@ -5,26 +5,25 @@ const multer = require("multer");
 
 const app = express();
 
-// ✅ Body parser (form & JSON data read karne ke liye)
+// ✅ Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Static public folder
+// ✅ Static folder
 app.use(express.static(path.join(__dirname, "public")));
 
 // ✅ Root route
 app.get("/", (req, res) => {
-  app.get("/", (req, res) => {
   res.send("Server Running");
 });
 
+// ✅ Health check (Railway ke liye)
 app.get("/health", (req, res) => res.send("OK"));
 
-
-// ✅ Multer memory storage (photo upload)
+// ✅ Multer memory storage
 const upload = multer({ storage: multer.memoryStorage() });
 
-// ✅ Poster Generate API
+// ✅ Generate Poster API
 app.post("/generate", upload.single("photo"), async (req, res) => {
   try {
     const name = req.body.name || "Your Name";
@@ -33,30 +32,30 @@ app.post("/generate", upload.single("photo"), async (req, res) => {
     const canvas = createCanvas(400, 600);
     const ctx = canvas.getContext("2d");
 
-    // ✅ Background load
+    // ✅ Background image load
     const background = await loadImage(
       path.join(__dirname, "assets", "festival.jpg")
     );
+
     ctx.drawImage(background, 0, 0, 400, 600);
 
-    // ✅ Dark overlay
+    // overlay
     ctx.fillStyle = "rgba(0,0,0,0.4)";
     ctx.fillRect(0, 0, 400, 600);
 
-    // ✅ Festival Title
+    // Festival title
     ctx.fillStyle = "#FFD700";
     ctx.font = "bold 28px Arial";
     ctx.textAlign = "center";
     ctx.fillText(festival, 200, 90);
 
-    // ✅ User Photo (if uploaded)
+    // user photo
     if (req.file) {
       const userPhoto = await loadImage(req.file.buffer);
 
-      // round photo mask
       ctx.save();
       ctx.beginPath();
-      ctx.arc(200, 225, 75, 0, Math.PI * 2, true);
+      ctx.arc(200, 225, 75, 0, Math.PI * 2);
       ctx.closePath();
       ctx.clip();
 
@@ -64,14 +63,14 @@ app.post("/generate", upload.single("photo"), async (req, res) => {
       ctx.restore();
     }
 
-    // ✅ Name
+    // name
     ctx.fillStyle = "#ffffff";
     ctx.shadowColor = "black";
     ctx.shadowBlur = 10;
     ctx.font = "26px Arial";
     ctx.fillText(name, 200, 350);
 
-    // ✅ Watermark
+    // watermark
     ctx.shadowBlur = 0;
     ctx.font = "14px Arial";
     ctx.fillStyle = "rgba(255,255,255,0.7)";
@@ -86,9 +85,9 @@ app.post("/generate", upload.single("photo"), async (req, res) => {
   }
 });
 
-// ✅ Railway PORT support
+// ✅ Railway PORT binding (VERY IMPORTANT)
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, "0.0.0.0", () =>
-  console.log("Server running on port", PORT)
-);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("Server running on port", PORT);
+});
