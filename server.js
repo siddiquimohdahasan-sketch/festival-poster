@@ -4,9 +4,13 @@ const path = require("path");
 const multer = require("multer");
 
 const app = express();
-app.use(express.static("public"));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const upload = multer({ storage: multer.memoryStorage() });
