@@ -10,6 +10,8 @@
     "node": "20.x"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "multer": "^2.0.2",
+    "sharp": "^0.34.5"
   }
 }
